@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/nico-mayer/aoc_go_template/utils"
+	"github.com/nico-mayer/aoc_2023/utils"
 )
 
 func Part01() {
