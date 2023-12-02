@@ -11,6 +11,7 @@ import (
 func Part02() {
 	data := strings.Split(utils.GetData("01", false), "\n")
 
+	var result int
 	replaceValues := map[string]string{
 		"one":   "o1e",
 		"two":   "t2o",
@@ -29,8 +30,6 @@ func Part02() {
 		}
 		data[i] = line
 	}
-
-	var result int
 
 	for _, modifiedLine := range data {
 		firstDigitFound := false
