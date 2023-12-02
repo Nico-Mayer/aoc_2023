@@ -1,4 +1,4 @@
-package day_00
+package day_03
 
 import (
 	"fmt"
@@ -7,8 +7,8 @@ import (
 	"github.com/nico-mayer/aoc_2023/utils"
 )
 
-func Part01() {
-	data := strings.Split(utils.GetData("00", true), "\n")
+func Part02() {
+	data := strings.Split(utils.GetData("03", true), "\n")
 
 	fmt.Printf("%#v", data)
 }

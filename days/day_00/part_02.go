@@ -8,7 +8,7 @@ import (
 )
 
 func Part02() {
-	data := strings.Split(utils.GetData("00", false), "\n")
+	data := strings.Split(utils.GetData("00", true), "\n")
 
 	fmt.Printf("%#v", data)
 }
