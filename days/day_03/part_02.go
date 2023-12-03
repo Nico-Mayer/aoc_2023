@@ -1,7 +1,9 @@
 package day_03
 
 import (
+	"fmt"
 	"strings"
+	"unicode"
 
 	"github.com/nico-mayer/aoc_2023/utils"
 )
@@ -9,45 +11,40 @@ import (
 type Gear struct {
 	Sym   Symbol
 	Valid bool
-	Parts []PartNumber
+	Parts map[string]int
 }
 
 func Part02() {
 	data := strings.Split(utils.GetData("03", false), "\n")
 
-	var runesData [][]rune
 	var gears []Gear
 	var solution int
 
 	for i, line := range data {
-		var runesRow []rune
 		for j, char := range line {
 			if char == '*' {
 				gears = append(gears, Gear{
 					Sym: Symbol{Char: char,
 						Y: i,
 						X: j},
+					Parts: make(map[string]int),
 				})
 			}
-
-			if char != '\r' {
-				runesRow = append(runesRow, char)
-			}
 		}
-		runesData = append(runesData, runesRow)
+
 	}
 
 	for _, gear := range gears {
-		gear.Sym.getNeighbors(runesData)
+		gear.Sym.getNeighbors(data)
 
 		for _, nb := range gear.Sym.Neighbors {
-			if isNumber(nb.Char) {
-				partNum := getPartNum(nb, runesData)
-				gear.Parts = append(gear.Parts, partNum)
+			if unicode.IsDigit(nb.Char) {
+				key, value := getPartNum(nb, data)
+				gear.Parts[key] = value
 			}
 		}
 
-		gear.filterParts()
+		gear.Parts = utils.RemoveDuplicates(gear.Parts)
 		gear.checkIfValid()
 
 		if gear.Valid {
@@ -55,20 +52,8 @@ func Part02() {
 		}
 
 	}
-	println(solution)
 
-}
-
-func (gear *Gear) filterParts() {
-	uniqueKeys := make(map[string]struct{})
-	var filteredNbPartNumbers []PartNumber
-	for _, parts := range gear.Parts {
-		if _, exists := uniqueKeys[parts.Key]; !exists {
-			uniqueKeys[parts.Key] = struct{}{}
-			filteredNbPartNumbers = append(filteredNbPartNumbers, parts)
-		}
-	}
-	gear.Parts = filteredNbPartNumbers
+	fmt.Printf("Solution P2: %d\n", solution)
 }
 
 func (gear *Gear) checkIfValid() {
@@ -80,8 +65,11 @@ func (gear *Gear) checkIfValid() {
 }
 
 func (gear *Gear) clacRatio() int {
-	one := gear.Parts[0].Value
-	two := gear.Parts[1].Value
+	result := 1
 
-	return one * two
+	for _, value := range gear.Parts {
+		result *= value
+	}
+
+	return result
 }

@@ -22,3 +22,15 @@ func GetData(day string, example bool) string {
 
 	return string(res)
 }
+
+func RemoveDuplicates(m map[string]int) map[string]int {
+	uniqueMap := make(map[string]int)
+
+	for key, value := range m {
+		if _, exists := uniqueMap[key]; !exists {
+			uniqueMap[key] = value
+		}
+	}
+
+	return uniqueMap
+}

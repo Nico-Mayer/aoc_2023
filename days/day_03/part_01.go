@@ -4,14 +4,10 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"unicode"
 
 	"github.com/nico-mayer/aoc_2023/utils"
 )
-
-type PartNumber struct {
-	Value int
-	Key   string
-}
 
 type Neighbor struct {
 	Char rune
@@ -29,14 +25,13 @@ type Symbol struct {
 func Part01() {
 	data := strings.Split(utils.GetData("03", false), "\n")
 
-	var partNumbers []PartNumber
-	var runesData [][]rune
+	var solution int
+	var partNumbers = make(map[string]int)
 	var symbols []Symbol
 
 	for i, line := range data {
-		var runesRow []rune
 		for j, char := range line {
-			if !isNumber(char) && char != '.' && char != '\r' {
+			if !unicode.IsDigit(char) && char != '.' && char != '\r' {
 				symbols = append(symbols, Symbol{
 					Char: char,
 					Y:    i,
@@ -44,41 +39,31 @@ func Part01() {
 				})
 			}
 
-			if char != '\r' {
-				runesRow = append(runesRow, char)
-			}
 		}
-		runesData = append(runesData, runesRow)
 	}
 
 	for _, sym := range symbols {
-		fmt.Printf("S:%c X:%d Y:%d\n", sym.Char, sym.X, sym.Y)
-		sym.getNeighbors(runesData)
-
-		for _, neighbor := range sym.Neighbors {
-			if isNumber(neighbor.Char) {
-				partNumbers = append(partNumbers, getPartNum(neighbor, runesData))
+		sym.getNeighbors(data)
+		for _, n := range sym.Neighbors {
+			if unicode.IsDigit(n.Char) {
+				key, value := getPartNum(n, data)
+				partNumbers[key] = value
 			}
 		}
-
 	}
 
-	uniqueKeys := make(map[string]struct{})
-	solution := 0
+	partNumbers = utils.RemoveDuplicates(partNumbers)
 
 	for _, pn := range partNumbers {
-		if _, exists := uniqueKeys[pn.Key]; !exists {
-			uniqueKeys[pn.Key] = struct{}{}
-			solution += pn.Value
-		}
+		solution += pn
 	}
 
-	fmt.Println(solution)
+	fmt.Printf("Solution P1: %d\n", solution)
 }
 
-func (sym *Symbol) getNeighbors(runeData [][]rune) {
+func (sym *Symbol) getNeighbors(data []string) {
 	appendNeighbor := func(x, y int) {
-		neighbor := checkNeighbor(x, y, runeData)
+		neighbor := checkNeighbor(x, y, data)
 		sym.Neighbors = append(sym.Neighbors, Neighbor{
 			Char: neighbor,
 			X:    x,
@@ -97,69 +82,44 @@ func (sym *Symbol) getNeighbors(runeData [][]rune) {
 
 }
 
-func checkNeighbor(x, y int, runeData [][]rune) (neighbor rune) {
+func checkNeighbor(x, y int, data []string) (neighbor rune) {
 	neighbor = '.'
-	if x >= 0 && x < len(runeData[0]) && y >= 0 && y < len(runeData) {
-		neighbor = runeData[y][x]
+	inBounds := (x >= 0 && x < len(data[0]) && y >= 0 && y < len(data))
+	if inBounds {
+		neighbor = rune(data[y][x])
 	}
-
 	return
 }
 
-func isNumber(char rune) bool {
-	var numbers = map[rune]int{
-		'0': 0,
-		'1': 1,
-		'2': 2,
-		'3': 3,
-		'4': 4,
-		'5': 5,
-		'6': 6,
-		'7': 7,
-		'8': 8,
-		'9': 9,
-	}
-	_, isNumber := numbers[char]
-	return isNumber
-}
-
-func getPartNum(neighbor Neighbor, runeData [][]rune) PartNumber {
-	resString := ""
-	resString += string(neighbor.Char)
-	resKey := fmt.Sprintf("(%d,%d)", neighbor.X, neighbor.Y)
+func getPartNum(neighbor Neighbor, data []string) (key string, value int) {
+	valueString := ""
+	valueString += string(neighbor.Char)
+	key = fmt.Sprintf("(%d,%d)", neighbor.X, neighbor.Y)
 
 	x := neighbor.X
 	y := neighbor.Y
 
 	for i := x - 1; i >= 0; i-- {
-		if isNumber(runeData[y][i]) {
-			key := fmt.Sprintf("(%d,%d)", i, y)
-			resString = string(runeData[y][i]) + resString
-			resKey = key + resKey
+		if unicode.IsDigit(rune(data[y][i])) {
+			pos := fmt.Sprintf("(%d,%d)", i, y)
+			valueString = string(data[y][i]) + valueString
+			key = pos + key
 		} else {
 			break
 		}
 	}
 
-	for i := x + 1; i < len(runeData[y]); i++ {
-		if isNumber(runeData[y][i]) {
-			key := fmt.Sprintf("(%d,%d)", i, y)
-			resString += string(runeData[y][i])
-			resKey = resKey + key
+	for i := x + 1; i < len(data[y]); i++ {
+		if unicode.IsDigit(rune(data[y][i])) {
+			pos := fmt.Sprintf("(%d,%d)", i, y)
+			valueString += string(data[y][i])
+			key = key + pos
 		} else {
 			break
 		}
 	}
 
-	resInt, err := strconv.Atoi(resString)
-	if err != nil {
-		fmt.Println(err)
-	}
+	value, _ = strconv.Atoi(valueString)
 
-	partNum := PartNumber{
-		Value: resInt,
-		Key:   resKey,
-	}
-
-	return partNum
+	return key, value
 }
