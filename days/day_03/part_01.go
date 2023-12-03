@@ -67,9 +67,7 @@ func Part01() {
 	solution := 0
 
 	for _, pn := range partNumbers {
-		// Check if the key is already present in the uniqueKeys map
 		if _, exists := uniqueKeys[pn.Key]; !exists {
-			// Add the key to the map and update the solution
 			uniqueKeys[pn.Key] = struct{}{}
 			solution += pn.Value
 		}
@@ -133,7 +131,6 @@ func getPartNum(neighbor Neighbor, runeData [][]rune) PartNumber {
 	x := neighbor.X
 	y := neighbor.Y
 
-	// Check in the x-direction to the left
 	for i := x - 1; i >= 0; i-- {
 		if isNumber(runeData[y][i]) {
 			key := fmt.Sprintf("(%d,%d)", i, y)
@@ -144,7 +141,6 @@ func getPartNum(neighbor Neighbor, runeData [][]rune) PartNumber {
 		}
 	}
 
-	// Check in the x-direction to the right
 	for i := x + 1; i < len(runeData[y]); i++ {
 		if isNumber(runeData[y][i]) {
 			key := fmt.Sprintf("(%d,%d)", i, y)
@@ -160,7 +156,6 @@ func getPartNum(neighbor Neighbor, runeData [][]rune) PartNumber {
 		fmt.Println(err)
 	}
 
-	// Create and return PartNumber struct
 	partNum := PartNumber{
 		Value: resInt,
 		Key:   resKey,
