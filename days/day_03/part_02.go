@@ -15,7 +15,7 @@ type Gear struct {
 }
 
 func Part02() {
-	data := strings.Split(utils.GetData("03", false), "\n")
+	data := strings.Split(utils.GetData("03", true), "\n")
 
 	var gears []Gear
 	var solution int
