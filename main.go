@@ -14,5 +14,6 @@ func main() {
 	// day_04.Part02()
 	// day_05.Part01()
 	// day_05.Part02()
-	day_06.Part01()
+	// day_06.Part01()
+	day_06.Part02()
 }

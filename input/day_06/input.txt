@@ -1,3 +1,2 @@
-Input Line 1
-Input Line 2
-Input Line 3
+Time:        54     81     70     88
+Distance:   446   1292   1035   1007

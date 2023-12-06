@@ -1,3 +1,2 @@
-Example Line 1
-Example Line 2
-Example Line 3
+Time:      7  15   30
+Distance:  9  40  200
