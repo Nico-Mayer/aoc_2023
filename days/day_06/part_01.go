@@ -5,6 +5,7 @@ import (
 	"log"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/nico-mayer/aoc_2023/utils"
 )
@@ -17,6 +18,8 @@ type Race struct {
 
 func Part01() {
 	data := strings.Split(utils.GetData("06", false), "\n")
+	fmt.Println("Day 6 Part 1:")
+	start := time.Now()
 
 	times := parseLine(data[0])
 	distances := parseLine(data[1])
@@ -30,26 +33,24 @@ func Part01() {
 		})
 	}
 
-	races[2].calcPossibleWins()
-
 	solution := 1
 	for _, race := range races {
 		pw := race.calcPossibleWins()
 		solution *= pw
 	}
-	fmt.Println(solution)
+	end := time.Since(start)
+	fmt.Printf("Solution: %d", solution)
+	fmt.Printf(" Took: %v\n", end)
 }
 
 func (r *Race) calcPossibleWins() int {
 	var possibleWins int
-	goalDistance := r.Distance
-	maxTime := r.Time
 
 	for i := 0; i <= r.Time; i++ {
 		speed := i
-		traveled := speed * (maxTime - i)
+		traveled := speed * (r.Time - i)
 
-		if traveled > goalDistance && maxTime-i > 0 {
+		if traveled > r.Distance && r.Time-i > 0 {
 			possibleWins++
 		}
 	}

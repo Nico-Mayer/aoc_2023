@@ -5,20 +5,20 @@ import (
 	"log"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/nico-mayer/aoc_2023/utils"
 )
 
 func Part02() {
 	data := strings.Split(utils.GetData("06", false), "\n")
-
+	fmt.Println("Day 6 Part 2:")
+	start := time.Now()
 	race := parseInput(data)
-
-	fmt.Println(race)
-
-	pw := race.calcPossibleWins()
-
-	fmt.Println(pw)
+	solution := race.calcPossibleWins()
+	end := time.Since(start)
+	fmt.Printf("Solution: %d", solution)
+	fmt.Printf(" Took: %v\n", end)
 }
 
 func parseInput(data []string) (r Race) {
