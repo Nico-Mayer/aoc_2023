@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/nico-mayer/aoc_2023/days/day_07"
+	"github.com/nico-mayer/aoc_2023/days/day_08"
 )
 
 func main() {
@@ -16,6 +16,8 @@ func main() {
 	// day_05.Part02()
 	// day_06.Part01()
 	// day_06.Part02()
-	day_07.Part01()
-	day_07.Part02()
+	// day_07.Part01()
+	// day_07.Part02()
+	// day_08.Part01()
+	day_08.Part02()
 }
