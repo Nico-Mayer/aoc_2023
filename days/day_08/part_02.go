@@ -33,19 +33,19 @@ func Part02() {
 
 	for _, pos := range startPositions {
 		steps := 0
-		fmt.Printf("Start: %s\n", pos)
+		// fmt.Printf("Start: %s\n", pos)
 
 		for pos[2] != 'Z' {
 			for _, instruction := range instructions {
 				steps++
-				old := pos
+
 				if instruction == 'L' {
 					pos = nodes[pos][0]
 				} else if instruction == 'R' {
 					pos = nodes[pos][1]
 				}
 
-				fmt.Printf("From:%s To:%s\n", old, pos)
+				//fmt.Printf("From:%s To:%s\n", old, pos)
 				if pos[2] == 'Z' {
 					break
 				}
@@ -53,9 +53,10 @@ func Part02() {
 		}
 
 		minStepsPerNode = append(minStepsPerNode, steps)
-		fmt.Printf("Took %d Steps\n", steps)
-		fmt.Println()
+		//fmt.Printf("Took %d Steps\n", steps)
+		//fmt.Println()
 	}
+	fmt.Println(minStepsPerNode)
 
 	fmt.Println(lcm(minStepsPerNode))
 
