@@ -10,5 +10,16 @@ import (
 func Part01() {
 	data := strings.Split(utils.GetData("09", true), "\n")
 
-	fmt.Printf("%#v", data)
+	solution := 0
+
+	for _, line := range data {
+		line = strings.TrimSpace(line)
+		solution += extrapolate(line)
+		fmt.Println(line)
+	}
+}
+
+func extrapolate(line string)int{
+
+	return 0 
 }
